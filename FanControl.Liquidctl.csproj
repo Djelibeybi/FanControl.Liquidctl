@@ -12,7 +12,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="FanControl.Plugins">
-            <HintPath>J:\Fan Control\FanControl.Plugins.dll</HintPath>
+            <HintPath>F:\FanControl\FanControl.Plugins.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>

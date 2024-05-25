@@ -24,8 +24,8 @@ internal static class LiquidctlCLIWrapper
             try
             {
                 CallLiquidControl(deviceDesc.serial_number is not ""
-                    ? $"--json --serial {deviceDesc.serial_number} initialize"
-                    : $"--json -m \"{deviceDesc.description}\" initialize");
+                    ? $"--legacy-690lc --vendor 0x1e71 --json --serial {deviceDesc.serial_number} initialize"
+                    : $"--legacy-690lc --vendor 0x1e71 --json -m \"{deviceDesc.description}\" initialize");
             }
             catch (Exception e)
             {
@@ -42,43 +42,43 @@ internal static class LiquidctlCLIWrapper
 
     private static List<LiquidctlDeviceJSON> ScanDevices()
     {
-        var process = CallLiquidControl("--json list");
+        var process = CallLiquidControl("--legacy-690lc --vendor 0x1e71 --json list");
         return JsonConvert.DeserializeObject<List<LiquidctlDeviceJSON>>(process.StandardOutput.ReadToEnd());
     }
 
     internal static LiquidCtlStatusJson ReadStatus(Option option, string value)
     {
         var valueStr = option.IsNumeric() ? $"{value}" : $"\"{value}\"";
-        var process = CallLiquidControl($"--json {option.GetSwitch()} {valueStr} status");
+        var process = CallLiquidControl($"--legacy-690lc --vendor 0x1e71 --json {option.GetSwitch()} {valueStr} status");
         var status = JsonConvert.DeserializeObject<List<LiquidCtlStatusJson>>(process.StandardOutput.ReadToEnd());
         return status?.Count > 0 ? status[0] : null;
     }
 
     internal static IEnumerable<LiquidCtlStatusJson> ReadStatus()
     {
-        var process = CallLiquidControl("--json status");
+        var process = CallLiquidControl("--legacy-690lc --vendor 0x1e71 --json status");
         return JsonConvert.DeserializeObject<List<LiquidCtlStatusJson>>(process.StandardOutput.ReadToEnd());
     }
 
     internal static IEnumerable<LiquidCtlStatusJson> ReadStatus(string address)
     {
-        var process = CallLiquidControl($"--json --address {address} status");
+        var process = CallLiquidControl($"--legacy-690lc --vendor 0x1e71 --json --address {address} status");
         return JsonConvert.DeserializeObject<List<LiquidCtlStatusJson>>(process.StandardOutput.ReadToEnd());
     }
 
     internal static void SetPump(string address, int value)
     {
-        CallLiquidControl($"--address {address} set pump speed {value}");
+        CallLiquidControl($"--legacy-690lc --address {address} set pump speed {value}");
     }
 
     internal static void SetFan(string address, int channel, int value)
     {
-        CallLiquidControl($"--address {address} set fan{channel} speed {value}");
+        CallLiquidControl($"--legacy-690lc --address {address} set fan{channel} speed {value}");
     }
 
     internal static void SetFan(string address, int value)
     {
-        CallLiquidControl($"--address {address} set fan speed {value}");
+        CallLiquidControl($"--legacy-690lc --address {address} set fan speed {value}");
     }
 
     private static Process CallLiquidControl(string arguments)
